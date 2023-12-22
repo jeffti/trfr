@@ -6,15 +6,15 @@ var blinkInterval = setInterval(blinkLED, 1000);
 var c = 0;
 function blinkLED() {
     if (LED.readSync() === 0) {
+        LED.writeSync(1);
+    }
+    else {
         if (c < 5) {
             c++;
             return;
         }
-        LED.writeSync(1);
-        c = 0;
-    }
-    else {
         LED.writeSync(0);
+        c = 0;
     }
 }
 function endBlink() {
