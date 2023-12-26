@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const onoff_1 = require("onoff");
 const axios_1 = __importDefault(require("axios"));
 const LED = new onoff_1.Gpio(4, 'out');
+setTimeout(resetStatus, 0);
 const blinkInterval = setInterval(checkStatus, 1000);
 const instance = axios_1.default.create({
     baseURL: 'http://admin.cleean.com.br:8080/api/v1'
@@ -21,7 +22,7 @@ function checkStatus() {
         }
         var payload = response.data;
         if (payload.activate) {
-            LED.writeSync(1);
+            LED.writeSync(0);
             console.log('Active server status');
             setTimeout(resetStatus, 500);
             console.log('Clearing server status');
@@ -45,12 +46,12 @@ function checkStatus() {
     console.log('Requesting server status');
 }
 function resetStatus() {
-    LED.writeSync(0);
+    LED.writeSync(1);
     console.log('Reset local status');
 }
 function endOperation() {
     clearInterval(blinkInterval);
-    LED.writeSync(0);
+    LED.writeSync(1);
     LED.unexport();
 }
 setTimeout(endOperation, 150000);
